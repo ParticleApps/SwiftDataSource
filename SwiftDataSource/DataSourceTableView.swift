@@ -19,8 +19,15 @@ open class DataSourceTableViewCell: UITableViewCell {
         else {
             textLabel?.text = model.title
         }
+        if let attributedSubtitle = model.attributedSubtitle {
+            detailTextLabel?.attributedText = attributedSubtitle
+            detailTextLabel?.numberOfLines = 0
+            detailTextLabel?.lineBreakMode = .byWordWrapping
+        }
+        else {
+            detailTextLabel?.text = model.subtitle
+        }
         
-        detailTextLabel?.text = model.subtitle
         imageView?.image = model.image
         accessoryType = model.tableViewCellAccessoryType
     }

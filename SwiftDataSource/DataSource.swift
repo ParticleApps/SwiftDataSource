@@ -18,6 +18,7 @@ open class DataSourceItem {
     open var selectedImage: UIImage?
     open var selectedImageURL: URL?
     open var attributedTitle: NSAttributedString?
+    open var attributedSubtitle: NSAttributedString?
     open var tableViewCellAccessoryType = UITableViewCellAccessoryType.none
     
     public init() {
