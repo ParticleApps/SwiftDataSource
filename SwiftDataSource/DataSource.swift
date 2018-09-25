@@ -55,6 +55,7 @@ open class DataSource {
     open var title = ""
     open var sections = [DataSourceSection]()
     open var cellTypes = [Int]()
+    open var reloader: DataSourceReloader?
     
     required public init() {
         

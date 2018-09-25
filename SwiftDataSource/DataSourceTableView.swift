@@ -37,6 +37,7 @@ open class DataSourceTableView: UITableView, UITableViewDataSource, UITableViewD
         self.registerCells()
         self.delegate = self
         self.dataSource = self
+        self.dataSourceModel.reloader = self
     }
     convenience public init(dataSourceModel: DataSource) {
         self.init(dataSourceModel: dataSourceModel, frame: .zero, style: .plain)

@@ -15,7 +15,7 @@ open class DataSourceCollectionViewCell: UICollectionViewCell {
     }
 }
 
-open class DataSourceCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate {
+open class DataSourceCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate, DataSourceReloader {
     open let dataSourceModel: DataSource
     
     //MARK: Initializers
@@ -27,6 +27,7 @@ open class DataSourceCollectionView: UICollectionView, UICollectionViewDataSourc
         
         self.delegate = self
         self.dataSource = self
+        self.dataSourceModel.reloader = self
     }
     convenience public init(dataSourceModel: DataSource) {
         self.init(dataSourceModel: dataSourceModel, frame: CGRect.zero, collectionViewLayout: UICollectionViewLayout())
@@ -103,5 +104,42 @@ open class DataSourceCollectionView: UICollectionView, UICollectionViewDataSourc
     open func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
         dataSourceModel.selectItemAtIndexPath(indexPath: indexPath)
+    }
+    
+    //MARK: DataSourceReloader
+    open func reloadDataAtIndexPath(indexPath: IndexPath) {
+        self.performBatchUpdates({
+            reloadItems(at: [indexPath])
+        }, completion: nil)
+    }
+    open func reloadDataAtIndexPaths(indexPaths: [IndexPath]) {
+        self.performBatchUpdates({
+            reloadItems(at: indexPaths)
+        }, completion: nil)
+    }
+    open func insertRowsAtIndexPaths(indexPaths: [IndexPath]) {
+        self.performBatchUpdates({
+            insertItems(at: indexPaths)
+        }, completion: nil)
+    }
+    open func removeRowsAtIndexPaths(indexPaths: [IndexPath]) {
+        self.performBatchUpdates({
+            deleteItems(at: indexPaths)
+        }, completion: nil)
+    }
+    open func reloadSections(sections: IndexSet) {
+        self.performBatchUpdates({
+            reloadSections(sections)
+        }, completion: nil)
+    }
+    open func insertSections(sections: IndexSet) {
+        self.performBatchUpdates({
+            insertSections(sections)
+        }, completion: nil)
+    }
+    open func removeSections(sections: IndexSet) {
+        self.performBatchUpdates({
+            deleteSections(sections)
+        }, completion: nil)
     }
 }
