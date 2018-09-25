@@ -73,6 +73,9 @@ open class DataSource {
         }
         return item
     }
+    @objc open func refreshData() {
+        self.reloader?.reloadData()
+    }
     open func numberOfSections() -> Int {
         return sections.count
     }
@@ -107,6 +110,7 @@ open class DataSource {
 
 @objc public protocol DataSourceReloader {
     @objc func reloadData()
+    @objc optional func startLoading()
     @objc optional func reloadDataAtIndexPath(indexPath: IndexPath)
     @objc optional func reloadDataAtIndexPaths(indexPaths: [IndexPath])
     @objc optional func insertRowsAtIndexPaths(indexPaths: [IndexPath])

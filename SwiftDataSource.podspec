@@ -10,6 +10,6 @@ Pod::Spec.new do |spec|
   spec.source                = { :git => 'https://github.com/ParticleApps/SwiftDataSource.git' }
   spec.social_media_url      = 'https://twitter.com/ParticleAppsCo'
   spec.frameworks            = 'Foundation', 'UIKit'
-  spec.ios.deployment_target = '9.0'
+  spec.ios.deployment_target = '10.0'
   spec.source_files          = "SwiftDataSource", "SwiftDataSource/**/*.{swift,h,m}"
 end

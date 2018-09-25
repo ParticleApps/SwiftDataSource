@@ -24,7 +24,7 @@ open class DataSourceCollectionView: UICollectionView, UICollectionViewDataSourc
         super.init(frame: frame, collectionViewLayout: collectionViewLayout)
         
         self.registerCells()
-        
+        self.attachRefreshControl()
         self.delegate = self
         self.dataSource = self
         self.dataSourceModel.reloader = self
@@ -46,6 +46,19 @@ open class DataSourceCollectionView: UICollectionView, UICollectionViewDataSourc
         for cellType in dataSourceModel.cellTypes {
             register(dataSourceModel.cellClassForType(type: cellType), forCellWithReuseIdentifier: identifierForCellType(cellType: cellType))
         }
+    }
+    @objc(startLoading) open func startLoading() {
+        self.refreshControl?.beginRefreshing()
+    }
+    open func attachRefreshControl() {
+        if self.refreshControl == nil {
+            self.refreshControl = UIRefreshControl()
+            self.refreshControl?.addTarget(self.dataSourceModel, action: #selector(DataSource.refreshData), for: .valueChanged)
+        }
+    }
+    open func dettachRefreshControl() {
+        self.refreshControl?.removeFromSuperview()
+        self.refreshControl = nil
     }
     open func configureCellForIndexPath(cell: DataSourceCollectionViewCell, type: Int, indexPath: IndexPath) {
         //Subclasses can configure cells here
@@ -107,39 +120,84 @@ open class DataSourceCollectionView: UICollectionView, UICollectionViewDataSourc
     }
     
     //MARK: DataSourceReloader
+    open override func reloadData() {
+        super.reloadData()
+        self.refreshControl?.endRefreshing()
+    }
     open func reloadDataAtIndexPath(indexPath: IndexPath) {
         self.performBatchUpdates({
             reloadItems(at: [indexPath])
-        }, completion: nil)
+        }) { (completed) in
+            self.refreshControl?.endRefreshing()
+        }
     }
     open func reloadDataAtIndexPaths(indexPaths: [IndexPath]) {
         self.performBatchUpdates({
             reloadItems(at: indexPaths)
-        }, completion: nil)
+        }) { (completed) in
+            self.refreshControl?.endRefreshing()
+        }
     }
     open func insertRowsAtIndexPaths(indexPaths: [IndexPath]) {
         self.performBatchUpdates({
             insertItems(at: indexPaths)
-        }, completion: nil)
+        }) { (completed) in
+            self.refreshControl?.endRefreshing()
+        }
     }
     open func removeRowsAtIndexPaths(indexPaths: [IndexPath]) {
         self.performBatchUpdates({
             deleteItems(at: indexPaths)
-        }, completion: nil)
+        }) { (completed) in
+            self.refreshControl?.endRefreshing()
+        }
     }
     open func reloadSections(sections: IndexSet) {
         self.performBatchUpdates({
             reloadSections(sections)
-        }, completion: nil)
+        }) { (completed) in
+            self.refreshControl?.endRefreshing()
+        }
     }
     open func insertSections(sections: IndexSet) {
         self.performBatchUpdates({
             insertSections(sections)
-        }, completion: nil)
+        }) { (completed) in
+            self.refreshControl?.endRefreshing()
+        }
     }
     open func removeSections(sections: IndexSet) {
         self.performBatchUpdates({
             deleteSections(sections)
-        }, completion: nil)
+        }) { (completed) in
+            self.refreshControl?.endRefreshing()
+        }
+    }
+}
+
+open class DataSourceCollectionViewController: UIViewController {
+    open let collectionView: DataSourceCollectionView
+    public required init(dataSourceModel: DataSource, collectionViewLayout: UICollectionViewLayout) {
+        self.collectionView = DataSourceCollectionView(dataSourceModel: dataSourceModel, frame: .zero, collectionViewLayout: collectionViewLayout)
+        super.init(nibName: nil, bundle: nil)
+        
+        //Set Properties
+        self.view.backgroundColor = .white
+        
+        //Add Subviews
+        self.view.addSubview(self.collectionView)
+        
+        //Set Constraints
+        self.collectionView.translatesAutoresizingMaskIntoConstraints = false
+        self.collectionView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
+        self.collectionView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
+        self.collectionView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
+        self.collectionView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
+    }
+    convenience public init(dataSourceModel: DataSource) {
+        self.init(dataSourceModel: dataSourceModel, collectionViewLayout: UICollectionViewLayout())
+    }
+    required public init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }

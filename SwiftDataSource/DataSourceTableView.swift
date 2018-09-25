@@ -40,8 +40,9 @@ open class DataSourceTableView: UITableView, UITableViewDataSource, UITableViewD
     public init(dataSourceModel: DataSource, frame: CGRect, style: UITableViewStyle) {
         self.dataSourceModel = dataSourceModel
         super.init(frame: frame, style: style)
-        
+
         self.registerCells()
+        self.attachRefreshControl()
         self.delegate = self
         self.dataSource = self
         self.dataSourceModel.reloader = self
@@ -63,6 +64,19 @@ open class DataSourceTableView: UITableView, UITableViewDataSource, UITableViewD
         for cellType in dataSourceModel.cellTypes {
             register(dataSourceModel.cellClassForType(type: cellType), forCellReuseIdentifier: identifierForCellType(cellType: cellType))
         }
+    }
+    @objc(startLoading) open func startLoading() {
+        self.refreshControl?.beginRefreshing()
+    }
+    open func attachRefreshControl() {
+        if self.refreshControl == nil {
+            self.refreshControl = UIRefreshControl()
+            self.refreshControl?.addTarget(self.dataSourceModel, action: #selector(DataSource.refreshData), for: .valueChanged)
+        }
+    }
+    open func dettachRefreshControl() {
+        self.refreshControl?.removeFromSuperview()
+        self.refreshControl = nil
     }
     open func configureCellForIndexPath(cell: DataSourceTableViewCell, type: Int, indexPath: IndexPath) {
         //Subclasses can configure cells here
@@ -148,25 +162,61 @@ open class DataSourceTableView: UITableView, UITableViewDataSource, UITableViewD
     }
     
     //MARK: DataSourceReloader
+    override open func reloadData() {
+        super.reloadData()
+        self.refreshControl?.endRefreshing()
+    }
     open func reloadDataAtIndexPath(indexPath: IndexPath) {
         reloadRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
+        self.refreshControl?.endRefreshing()
     }
     open func reloadDataAtIndexPaths(indexPaths: [IndexPath]) {
         reloadRows(at: indexPaths, with: UITableViewRowAnimation.automatic)
+        self.refreshControl?.endRefreshing()
     }
     open func insertRowsAtIndexPaths(indexPaths: [IndexPath]) {
         insertRows(at: indexPaths, with: UITableViewRowAnimation.automatic)
+        self.refreshControl?.endRefreshing()
     }
     open func removeRowsAtIndexPaths(indexPaths: [IndexPath]) {
         deleteRows(at: indexPaths, with: UITableViewRowAnimation.automatic)
+        self.refreshControl?.endRefreshing()
     }
     open func reloadSections(sections: IndexSet) {
         reloadSections(sections, with: UITableViewRowAnimation.automatic)
+        self.refreshControl?.endRefreshing()
     }
     open func insertSections(sections: IndexSet) {
         insertSections(sections, with: UITableViewRowAnimation.automatic)
+        self.refreshControl?.endRefreshing()
     }
     open func removeSections(sections: IndexSet) {
         deleteSections(sections, with: UITableViewRowAnimation.automatic)
+        self.refreshControl?.endRefreshing()
+    }
+}
+
+open class DataSourceTableViewController: UIViewController {
+    open let tableView: DataSourceTableView
+    public required init(dataSourceModel: DataSource) {
+        self.tableView = DataSourceTableView(dataSourceModel: dataSourceModel)
+        super.init(nibName: nil, bundle: nil)
+        
+        //Set Properties
+        self.view.backgroundColor = .white
+        
+        //Add Subviews
+        self.view.addSubview(self.tableView)
+        
+        //Set Constraints
+        self.tableView.translatesAutoresizingMaskIntoConstraints = false
+        self.tableView.topAnchor.constraint(equalTo: self.view.topAnchor, constant: 0).isActive = true
+        self.tableView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: 0).isActive = true
+        self.tableView.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 0).isActive = true
+        self.tableView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: 0).isActive = true
+        
+    }
+    public required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
