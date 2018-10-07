@@ -46,6 +46,10 @@ open class DataSourceTableView: UITableView, UITableViewDataSource, UITableViewD
         self.delegate = self
         self.dataSource = self
         self.dataSourceModel.reloader = self
+        
+        if self.dataSourceModel.isLoading {
+            self.startLoading()
+        }
     }
     convenience public init(dataSourceModel: DataSource) {
         self.init(dataSourceModel: dataSourceModel, frame: .zero, style: .plain)
@@ -67,6 +71,9 @@ open class DataSourceTableView: UITableView, UITableViewDataSource, UITableViewD
     }
     @objc(startLoading) open func startLoading() {
         self.refreshControl?.beginRefreshing()
+    }
+    @objc(finishLoading) open func finishLoading() {
+        self.refreshControl?.endRefreshing()
     }
     open func attachRefreshControl() {
         if self.refreshControl == nil {
@@ -162,10 +169,6 @@ open class DataSourceTableView: UITableView, UITableViewDataSource, UITableViewD
     }
     
     //MARK: DataSourceReloader
-    override open func reloadData() {
-        super.reloadData()
-        self.refreshControl?.endRefreshing()
-    }
     open func reloadDataAtIndexPath(indexPath: IndexPath) {
         reloadRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
         self.refreshControl?.endRefreshing()

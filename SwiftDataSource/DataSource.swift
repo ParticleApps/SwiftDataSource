@@ -57,6 +57,18 @@ open class DataSource {
     open var sections = [DataSourceSection]()
     open var cellTypes = [Int]()
     open var reloader: DataSourceReloader?
+    open var isLoading: Bool = false {
+        didSet {
+            DispatchQueue.main.async {
+                if self.isLoading {
+                    self.reloader?.startLoading?()
+                }
+                else {
+                    self.reloader?.finishLoading?()
+                }
+            }
+        }
+    }
     
     required public init() {
         
@@ -111,6 +123,7 @@ open class DataSource {
 @objc public protocol DataSourceReloader {
     @objc func reloadData()
     @objc optional func startLoading()
+    @objc optional func finishLoading()
     @objc optional func reloadDataAtIndexPath(indexPath: IndexPath)
     @objc optional func reloadDataAtIndexPaths(indexPaths: [IndexPath])
     @objc optional func insertRowsAtIndexPaths(indexPaths: [IndexPath])

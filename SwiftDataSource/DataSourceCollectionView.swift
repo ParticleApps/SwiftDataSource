@@ -28,6 +28,10 @@ open class DataSourceCollectionView: UICollectionView, UICollectionViewDataSourc
         self.delegate = self
         self.dataSource = self
         self.dataSourceModel.reloader = self
+        
+        if self.dataSourceModel.isLoading {
+            self.startLoading()
+        }
     }
     convenience public init(dataSourceModel: DataSource) {
         self.init(dataSourceModel: dataSourceModel, frame: CGRect.zero, collectionViewLayout: UICollectionViewLayout())
@@ -48,6 +52,9 @@ open class DataSourceCollectionView: UICollectionView, UICollectionViewDataSourc
         }
     }
     @objc(startLoading) open func startLoading() {
+        self.refreshControl?.beginRefreshing()
+    }
+    @objc(finishLoading) open func finishLoading() {
         self.refreshControl?.beginRefreshing()
     }
     open func attachRefreshControl() {
@@ -120,10 +127,6 @@ open class DataSourceCollectionView: UICollectionView, UICollectionViewDataSourc
     }
     
     //MARK: DataSourceReloader
-    open override func reloadData() {
-        super.reloadData()
-        self.refreshControl?.endRefreshing()
-    }
     open func reloadDataAtIndexPath(indexPath: IndexPath) {
         self.performBatchUpdates({
             reloadItems(at: [indexPath])
