@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name                  = 'SwiftDataSource'
-  spec.version               = '0.1.1'
+  spec.version               = '0.9.0'
   spec.summary               = 'DataSource framework for Particle projects in Swift.'
   spec.description           = 'Adds convience methods for common objects in UIKit, Foundation.'
   spec.homepage              = 'https://github.com/ParticleApps/SwiftDataSource'
@@ -12,4 +12,5 @@ Pod::Spec.new do |spec|
   spec.frameworks            = 'Foundation', 'UIKit'
   spec.ios.deployment_target = '10.0'
   spec.source_files          = "SwiftDataSource", "SwiftDataSource/**/*.{swift,h,m}"
+  spec.swift_version         = '3.3'
 end
