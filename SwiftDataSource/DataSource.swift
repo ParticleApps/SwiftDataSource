@@ -18,9 +18,10 @@ open class DataSourceItem {
     open var selectedImage: UIImage?
     open var selectedImageURL: URL?
     open var attributedTitle: NSAttributedString?
+    open var selectionBlock: ((IndexPath) -> Void)?
     open var attributedSubtitle: NSAttributedString?
     open var tableViewCellAccessoryType = UITableViewCellAccessoryType.none
-    
+
     public init() {
         
     }
@@ -113,7 +114,7 @@ open class DataSource {
         return sections[section].footerTitle
     }
     open func selectItemAtIndexPath(indexPath: IndexPath) {
-        
+        sections[indexPath.section].items[indexPath.row].selectionBlock?(indexPath)
     }
     open func cellClassForType(type: Int) -> AnyClass {
         return DataSourceTableViewCell.self
