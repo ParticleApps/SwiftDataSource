@@ -16,7 +16,7 @@ open class DataSourceCollectionViewCell: UICollectionViewCell {
 }
 
 open class DataSourceCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate, DataSourceReloader {
-    open let dataSourceModel: DataSource
+    public let dataSourceModel: DataSource
     
     //MARK: Initializers
     public init(dataSourceModel: DataSource, frame: CGRect, collectionViewLayout: UICollectionViewLayout) {
@@ -97,10 +97,10 @@ open class DataSourceCollectionView: UICollectionView, UICollectionViewDataSourc
         let reuseableView = UICollectionReusableView(frame: CGRect.zero)
         
         var title = ""
-        if (kind == UICollectionElementKindSectionHeader) {
+        if (kind == UICollectionView.elementKindSectionHeader) {
             title = dataSourceModel.headerTitleForSection(section: indexPath.section)
         }
-        else if (kind == UICollectionElementKindSectionFooter) {
+        else if (kind == UICollectionView.elementKindSectionFooter) {
             title = dataSourceModel.footerTitleForSection(section: indexPath.section)
         }
         
@@ -111,9 +111,9 @@ open class DataSourceCollectionView: UICollectionView, UICollectionViewDataSourc
             
             reuseableView.addSubview(label)
             reuseableView.addConstraints([
-                NSLayoutConstraint.init(item: label, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: reuseableView, attribute: NSLayoutAttribute.leading, multiplier: 1.0, constant: 0),
-                NSLayoutConstraint.init(item: label, attribute: NSLayoutAttribute.trailing, relatedBy: NSLayoutRelation.equal, toItem: reuseableView, attribute: NSLayoutAttribute.trailing, multiplier: 1.0, constant: 0),
-                NSLayoutConstraint.init(item: label, attribute: NSLayoutAttribute.bottom, relatedBy: NSLayoutRelation.equal, toItem: reuseableView, attribute: NSLayoutAttribute.bottom, multiplier: 1.0, constant: 0)
+                NSLayoutConstraint.init(item: label, attribute: NSLayoutConstraint.Attribute.leading, relatedBy: NSLayoutConstraint.Relation.equal, toItem: reuseableView, attribute: NSLayoutConstraint.Attribute.leading, multiplier: 1.0, constant: 0),
+                NSLayoutConstraint.init(item: label, attribute: NSLayoutConstraint.Attribute.trailing, relatedBy: NSLayoutConstraint.Relation.equal, toItem: reuseableView, attribute: NSLayoutConstraint.Attribute.trailing, multiplier: 1.0, constant: 0),
+                NSLayoutConstraint.init(item: label, attribute: NSLayoutConstraint.Attribute.bottom, relatedBy: NSLayoutConstraint.Relation.equal, toItem: reuseableView, attribute: NSLayoutConstraint.Attribute.bottom, multiplier: 1.0, constant: 0)
                 ])
         }
         
@@ -179,7 +179,7 @@ open class DataSourceCollectionView: UICollectionView, UICollectionViewDataSourc
 }
 
 open class DataSourceCollectionViewController: UIViewController {
-    open let collectionView: DataSourceCollectionView
+    public let collectionView: DataSourceCollectionView
     public required init(dataSourceModel: DataSource, collectionViewLayout: UICollectionViewLayout) {
         self.collectionView = DataSourceCollectionView(dataSourceModel: dataSourceModel, frame: .zero, collectionViewLayout: collectionViewLayout)
         super.init(nibName: nil, bundle: nil)

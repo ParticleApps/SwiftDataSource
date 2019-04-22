@@ -20,7 +20,7 @@ open class DataSourceItem {
     open var attributedTitle: NSAttributedString?
     open var selectionBlock: ((IndexPath) -> Void)?
     open var attributedSubtitle: NSAttributedString?
-    open var tableViewCellAccessoryType = UITableViewCellAccessoryType.none
+    open var tableViewCellAccessoryType = UITableViewCell.AccessoryType.none
 
     public init() {
         

@@ -34,10 +34,10 @@ open class DataSourceTableViewCell: UITableViewCell {
 }
 
 open class DataSourceTableView: UITableView, UITableViewDataSource, UITableViewDelegate, DataSourceReloader {
-    open let dataSourceModel: DataSource
+    public let dataSourceModel: DataSource
     
     //MARK: Initializers
-    public init(dataSourceModel: DataSource, frame: CGRect, style: UITableViewStyle) {
+    public init(dataSourceModel: DataSource, frame: CGRect, style: UITableView.Style) {
         self.dataSourceModel = dataSourceModel
         super.init(frame: frame, style: style)
 
@@ -130,9 +130,9 @@ open class DataSourceTableView: UITableView, UITableViewDataSource, UITableViewD
             
             header.addSubview(label)
             header.addConstraints([
-                NSLayoutConstraint.init(item: label, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: header, attribute: NSLayoutAttribute.leading, multiplier: 1.0, constant: 0),
-                NSLayoutConstraint.init(item: label, attribute: NSLayoutAttribute.trailing, relatedBy: NSLayoutRelation.equal, toItem: header, attribute: NSLayoutAttribute.trailing, multiplier: 1.0, constant: 0),
-                NSLayoutConstraint.init(item: label, attribute: NSLayoutAttribute.bottom, relatedBy: NSLayoutRelation.equal, toItem: header, attribute: NSLayoutAttribute.bottom, multiplier: 1.0, constant: 0)
+                NSLayoutConstraint.init(item: label, attribute: NSLayoutConstraint.Attribute.leading, relatedBy: NSLayoutConstraint.Relation.equal, toItem: header, attribute: NSLayoutConstraint.Attribute.leading, multiplier: 1.0, constant: 0),
+                NSLayoutConstraint.init(item: label, attribute: NSLayoutConstraint.Attribute.trailing, relatedBy: NSLayoutConstraint.Relation.equal, toItem: header, attribute: NSLayoutConstraint.Attribute.trailing, multiplier: 1.0, constant: 0),
+                NSLayoutConstraint.init(item: label, attribute: NSLayoutConstraint.Attribute.bottom, relatedBy: NSLayoutConstraint.Relation.equal, toItem: header, attribute: NSLayoutConstraint.Attribute.bottom, multiplier: 1.0, constant: 0)
                 ])
         }
         
@@ -149,9 +149,9 @@ open class DataSourceTableView: UITableView, UITableViewDataSource, UITableViewD
             
             footer.addSubview(label)
             footer.addConstraints([
-                NSLayoutConstraint.init(item: label, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: footer, attribute: NSLayoutAttribute.leading, multiplier: 1.0, constant: 0),
-                NSLayoutConstraint.init(item: label, attribute: NSLayoutAttribute.trailing, relatedBy: NSLayoutRelation.equal, toItem: footer, attribute: NSLayoutAttribute.trailing, multiplier: 1.0, constant: 0),
-                NSLayoutConstraint.init(item: label, attribute: NSLayoutAttribute.bottom, relatedBy: NSLayoutRelation.equal, toItem: footer, attribute: NSLayoutAttribute.bottom, multiplier: 1.0, constant: 0)
+                NSLayoutConstraint.init(item: label, attribute: NSLayoutConstraint.Attribute.leading, relatedBy: NSLayoutConstraint.Relation.equal, toItem: footer, attribute: NSLayoutConstraint.Attribute.leading, multiplier: 1.0, constant: 0),
+                NSLayoutConstraint.init(item: label, attribute: NSLayoutConstraint.Attribute.trailing, relatedBy: NSLayoutConstraint.Relation.equal, toItem: footer, attribute: NSLayoutConstraint.Attribute.trailing, multiplier: 1.0, constant: 0),
+                NSLayoutConstraint.init(item: label, attribute: NSLayoutConstraint.Attribute.bottom, relatedBy: NSLayoutConstraint.Relation.equal, toItem: footer, attribute: NSLayoutConstraint.Attribute.bottom, multiplier: 1.0, constant: 0)
                 ])
         }
         
@@ -170,37 +170,37 @@ open class DataSourceTableView: UITableView, UITableViewDataSource, UITableViewD
     
     //MARK: DataSourceReloader
     open func reloadDataAtIndexPath(indexPath: IndexPath) {
-        reloadRows(at: [indexPath], with: UITableViewRowAnimation.automatic)
+        reloadRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
         self.refreshControl?.endRefreshing()
     }
     open func reloadDataAtIndexPaths(indexPaths: [IndexPath]) {
-        reloadRows(at: indexPaths, with: UITableViewRowAnimation.automatic)
+        reloadRows(at: indexPaths, with: UITableView.RowAnimation.automatic)
         self.refreshControl?.endRefreshing()
     }
     open func insertRowsAtIndexPaths(indexPaths: [IndexPath]) {
-        insertRows(at: indexPaths, with: UITableViewRowAnimation.automatic)
+        insertRows(at: indexPaths, with: UITableView.RowAnimation.automatic)
         self.refreshControl?.endRefreshing()
     }
     open func removeRowsAtIndexPaths(indexPaths: [IndexPath]) {
-        deleteRows(at: indexPaths, with: UITableViewRowAnimation.automatic)
+        deleteRows(at: indexPaths, with: UITableView.RowAnimation.automatic)
         self.refreshControl?.endRefreshing()
     }
     open func reloadSections(sections: IndexSet) {
-        reloadSections(sections, with: UITableViewRowAnimation.automatic)
+        reloadSections(sections, with: UITableView.RowAnimation.automatic)
         self.refreshControl?.endRefreshing()
     }
     open func insertSections(sections: IndexSet) {
-        insertSections(sections, with: UITableViewRowAnimation.automatic)
+        insertSections(sections, with: UITableView.RowAnimation.automatic)
         self.refreshControl?.endRefreshing()
     }
     open func removeSections(sections: IndexSet) {
-        deleteSections(sections, with: UITableViewRowAnimation.automatic)
+        deleteSections(sections, with: UITableView.RowAnimation.automatic)
         self.refreshControl?.endRefreshing()
     }
 }
 
 open class DataSourceTableViewController: UIViewController {
-    open let tableView: DataSourceTableView
+    public let tableView: DataSourceTableView
     public required init(dataSourceModel: DataSource) {
         self.tableView = DataSourceTableView(dataSourceModel: dataSourceModel)
         super.init(nibName: nil, bundle: nil)
