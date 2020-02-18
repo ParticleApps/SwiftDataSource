@@ -75,12 +75,14 @@ open class DataSource {
         
     }
     
-    class open func itemWith(cellType: Int, title: String, image: UIImage?, subtitle: String?) -> DataSourceItem {
+    class open func itemWith(cellType: Int, title: String? = nil, image: UIImage? = nil, subtitle: String? = nil) -> DataSourceItem {
         let item = DataSourceItem()
         item.type = cellType
-        item.title = title
         item.image = image
         
+        if let itemTitle = title {
+            item.title = itemTitle
+        }
         if let itemSubtitle = subtitle {
             item.subtitle = itemSubtitle
         }
