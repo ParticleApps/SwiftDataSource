@@ -54,6 +54,8 @@ open class DataSourceSection {
 }
 
 open class DataSource {
+    public static var defaultCellType = 0
+    
     open var title = ""
     open var sections = [DataSourceSection]()
     open var cellTypes = [Int]()
@@ -72,10 +74,10 @@ open class DataSource {
     }
     
     required public init() {
-        
+        self.cellTypes.append(DataSource.defaultCellType)
     }
     
-    class open func itemWith(cellType: Int, title: String? = nil, image: UIImage? = nil, subtitle: String? = nil) -> DataSourceItem {
+    class open func itemWith(cellType: Int = DataSource.defaultCellType, title: String? = nil, image: UIImage? = nil, subtitle: String? = nil) -> DataSourceItem {
         let item = DataSourceItem()
         item.type = cellType
         item.image = image
