@@ -15,6 +15,7 @@ open class DataSourceItem {
     open var subtitle = ""
     open var image: UIImage?
     open var imageURL: URL?
+    open var isEnabled = true
     open var selectedImage: UIImage?
     open var selectedImageURL: URL?
     open var attributedTitle: NSAttributedString?
