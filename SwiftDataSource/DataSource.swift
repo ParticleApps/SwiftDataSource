@@ -97,6 +97,11 @@ open class DataSource {
     open func numberOfSections() -> Int {
         return sections.count
     }
+    open func numberOfItems() -> Int {
+        return sections.map { (section) -> Int in
+            return section.items.count
+        }.reduce(0, +)
+    }
     open func numberOfItemsInSection(section: Int) -> Int {
         return sections[section].items.count
     }
